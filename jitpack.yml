@@ -5,18 +5,6 @@ jdk:
   - oraclejdk8
 before_install:
   # The plugin references a SNAPSHOT version of its parent POM without
-  # specifying the repository in which this artifact may be found. We resolve
-  # this by simply building the parent.
-  - >
-    (
-      cd "$(mktemp -d)" &&
-      git clone https://github.com/pentaho/maven-parent-poms.git . &&
-      mvn install -pl :pentaho-ce-jar-parent-pom -am
-    )
-install:
-  # We purge the parent POMs from the local repository, so that JitPack.io does
-  # not publish them.
-  - >
-    mvn \
-      install -DskipTests \
-      dependency:purge-local-repository -DmanualInclude=org.pentaho:pentaho-ce-jar-parent-pom,org.pentaho:pentaho-ce-parent-pom,org.pentaho:pentaho-parent-pom
+  # specifying the repository in which this artifact may be found; the
+  # `settings.xml` file resolves this.
+  - curl -o ~/.m2/settings.xml https://raw.githubusercontent.com/pentaho/maven-parent-poms/master/maven-support-files/settings.xml
