@@ -1,0 +1,22 @@
+jdk:
+  # By default JitPack.io builds using JDK 6u45, which causes the build to fail
+  # due to an issue fixed in only in JDK 6u171. See
+  # http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7044060
+  - oraclejdk8
+before_install:
+  # The plugin references a SNAPSHOT version of its parent POM without
+  # specifying the repository in which this artifact may be found. We resolve
+  # this by simply building the parent.
+  - >
+    (
+      cd "$(mktemp -d)" &&
+      git clone https://github.com/pentaho/maven-parent-poms.git . &&
+      mvn install -pl :pentaho-ce-jar-parent-pom -am
+    )
+install:
+  # We purge the parent POMs from the local repository, so that JitPack.io does
+  # not publish them.
+  - >
+    mvn \
+      install -DskipTests \
+      dependency:purge-local-repository -DmanualInclude=org.pentaho:pentaho-ce-jar-parent-pom,org.pentaho:pentaho-ce-parent-pom,org.pentaho:pentaho-parent-pom
