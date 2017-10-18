@@ -3,8 +3,3 @@ jdk:
   # due to an issue fixed in only in JDK 6u171. See
   # http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7044060
   - oraclejdk8
-before_install:
-  # The plugin references a SNAPSHOT version of its parent POM without
-  # specifying the repository in which this artifact may be found; the
-  # `settings.xml` file resolves this.
-  - curl -o ~/.m2/settings.xml https://raw.githubusercontent.com/pentaho/maven-parent-poms/master/maven-support-files/settings.xml
